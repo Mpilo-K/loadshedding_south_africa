@@ -1,4 +1,4 @@
- # Analysing loadshedding in South Africa from Google yrends of 2004 - 2022
+ # Analysing loadshedding in South Africa from Google trends of 2004 - 2022
 
 In this project I am showcasing my Data Analytics skills by exploring South Africa's loadshedding interest by analysing Google trends data. I am still working on improving the visualisations and intepretations from this data to help anyone easily understand and also see answers to interesting questions.
 
