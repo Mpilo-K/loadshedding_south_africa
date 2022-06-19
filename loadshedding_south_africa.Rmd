@@ -1,0 +1,66 @@
+---
+title: "Loadshedding South Africa"
+author: "Mpilo Khumalo"
+date: '2022-06-16'
+output: html_document
+---
+
+## Loading Packages
+
+```{r, results='hide', warning=FALSE, message=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(cowplot)
+library(dplyr)
+library(lubridate)
+library(plyr)
+#library(rvest)
+library(anytime)
+
+```
+
+
+## Loading Data
+
+```{r}
+
+raw_loadshedding_data <- read.csv("multiTimeline.csv", sep = ",", header = T)
+# Data source: Google Trends
+
+```
+
+## Cleaning Loadshedding Data
+
+```{r results='hide', warning=FALSE, message=FALSE}
+#
+raw_loadshedding_df <- as.data.frame(raw_loadshedding_data)
+raw_loadshedding_df <- rownames_to_column(raw_loadshedding_data, "VALUE")
+raw_loadshedding_df <- raw_loadshedding_df[-1,]
+colnames(raw_loadshedding_df) <- c("Month", "Loadshedding_searches")
+
+raw_loadshedding_df <- filter(raw_loadshedding_df, Loadshedding_searches >= 0)
+
+raw_loadshedding_df$Loadshedding_searches <- as.numeric(raw_loadshedding_df$Loadshedding_searches)
+
+raw_loadshedding_df$Month <- anydate(raw_loadshedding_df$Month)
+
+attach(raw_loadshedding_df)
+
+```
+
+## Data Visualisations
+
+### Confirmed Cases with Lockdowns
+
+```{r}
+(graph1 <- ggplot(raw_loadshedding_df, aes(Month, Loadshedding_searches, group = 1)) + 
+   geom_point() + 
+   geom_line() + 
+   labs(x = "Date", y = 'Loadshedding interest over time (Google Trends)') +  
+   theme(panel.background = element_rect(),
+                    axis.line = element_line(colour ="black")))
+ggsave(filename = "loadshedding_South_Africa.png", graph1)
+
+```
+
